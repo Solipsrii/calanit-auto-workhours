@@ -1,3 +1,7 @@
+//enter into: https://bankjerusalem.net.hilan.co.il/Hilannetv2/Attendance/AttendanceApproval.aspx
+//then right-click, RUN.
+//then retrieve the json output from the console!
+
 /**
 plan abstract:
 1. fetch element and filter out data from it
@@ -50,15 +54,9 @@ exit:
 i.e:
 'ct${i}_mp_rptInner_ct${i}_${col_type}'
 */
-ctl00_mp_rptInner_ctl00_tdEntrySpan
 let timetables = [];
 let date, t_entry, t_exit, col_num;
 const addr = "ctl00_mp_rptInner_ctl"
-const col_type = {
-    "date":"tdDay",
-    "tclk_in":"tdEntrySpan",
-    "tclk_out":"tdExit"
-}
 
 //ctl00_mp_rptInner_ctl00_trReps
 i=1
@@ -66,7 +64,7 @@ val = `${i}`.padStart(2, '0')
 elem = document.getElementById(addr+`${val}_trReps`)
 console.log(`result: ${elem}`)
 
-col_num = "01"
+col_num = "00"
 //loop through each MAIN ELEMENT ROW, until the naming-scheme returns NULL (no more shifts in this month!)
 //"col_num" -> if i=1, then we want "01" (ctl01), if i=10, we want "10" (ctl10) --> notice it's ctL not ct"one". <_< 
 for(i=0; ((document.getElementById(addr+`${col_num}_trReps`)) != null); i++, col_num=`${i}`.padStart(2, '0')){
@@ -79,11 +77,14 @@ for(i=0; ((document.getElementById(addr+`${col_num}_trReps`)) != null); i++, col
     t_exit  = document.getElementById(addr+`${col_num}_tdExitSpan`).innerHTML
     
     timetables[i] = {
-        "date":date,
+        "date":`${date}`,
         "t_entry":t_entry,
         "t_exit":t_exit
     }
+
+    console.log(`${i}. date:${date}  entry:${t_entry}   exit:${t_exit} col_num:${col_num}\n`)
 }
 
 //print final result 
+alert(JSON.stringify(timetables))
 console.log(JSON.stringify(timetables))
